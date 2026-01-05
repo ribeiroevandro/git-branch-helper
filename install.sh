@@ -129,7 +129,9 @@ if [ "$install_plugin" = true ]; then
                 mkdir -p "$FISH_DIR/conf.d"
                 
                 curl -sL "$REPO_URL/fish/functions/create_branch.fish" -o "$FISH_DIR/functions/create_branch.fish"
+                curl -sL "$REPO_URL/fish/functions/git_branch_config.fish" -o "$FISH_DIR/functions/git_branch_config.fish"
                 curl -sL "$REPO_URL/fish/completions/create_branch.fish" -o "$FISH_DIR/completions/create_branch.fish"
+                curl -sL "$REPO_URL/fish/completions/git_branch_config.fish" -o "$FISH_DIR/completions/git_branch_config.fish"
                 curl -sL "$REPO_URL/fish/conf.d/git-branch-helper.fish" -o "$FISH_DIR/conf.d/git-branch-helper.fish"
                 
                 print_success "✅ Plugin Fish instalado manualmente!"

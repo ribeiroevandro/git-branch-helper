@@ -35,7 +35,7 @@ fi
 # Criar estrutura
 print_info "📁 Criando estrutura de diretórios..."
 
-mkdir -p git-branch-helper/{fish/{functions,completions,conf.d},bash,zsh,bin,docs,scripts}
+mkdir -p git-branch-helper/{fish/{functions,completions,conf.d},functions,completions,conf.d,bash,zsh,bin,docs,scripts}
 
 cd git-branch-helper
 
@@ -43,9 +43,17 @@ cd git-branch-helper
 print_info "📝 Criando arquivos base..."
 
 touch fish/functions/create_branch.fish
+touch fish/functions/git_branch_config.fish
 touch fish/completions/create_branch.fish
+touch fish/completions/git_branch_config.fish
 touch fish/conf.d/git-branch-helper.fish
 touch fish/README.md
+
+touch functions/create_branch.fish
+touch functions/git_branch_config.fish
+touch completions/create_branch.fish
+touch completions/git_branch_config.fish
+touch conf.d/git-branch-helper.fish
 
 touch bash/create_branch.bash
 touch bash/README.md
@@ -130,9 +138,11 @@ EOF
 # Criar fisher_file
 print_info "🎣 Criando fisher_file..."
 cat > fisher_file << 'EOF'
-fish/functions/create_branch.fish
-fish/completions/create_branch.fish
-fish/conf.d/git-branch-helper.fish
+conf.d/git-branch-helper.fish
+functions/create_branch.fish
+functions/git_branch_config.fish
+completions/create_branch.fish
+completions/git_branch_config.fish
 EOF
 
 # Criar README básico
