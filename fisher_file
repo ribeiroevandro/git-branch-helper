@@ -4,3 +4,4 @@ functions/git_branch_config.fish
 completions/create_branch.fish
 completions/git_branch_config.fish
 
+

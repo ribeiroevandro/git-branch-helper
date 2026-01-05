@@ -21,3 +21,4 @@ complete -c create_branch -n "__fish_is_first_arg" -a "5" -d "style - Formataç�
 complete -c create_branch -n "__fish_is_first_arg" -a "6" -d "refactor - Refatoração"
 complete -c create_branch -n "__fish_is_first_arg" -a "7" -d "test - Testes"
 
+

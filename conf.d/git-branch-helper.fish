@@ -18,3 +18,4 @@ if not set -q __git_branch_helper_loaded
     echo "🐚 Git Branch Helper carregado! Use 'create_branch --help' ou 'create_branch' para começar."
 end
 
+

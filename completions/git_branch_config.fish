@@ -20,3 +20,4 @@ complete -c git_branch_config -n "__fish_seen_subcommand_from add" -a "(__fish_c
 # Autocompletar índices para 'remove'
 complete -c git_branch_config -n "__fish_seen_subcommand_from remove rm" -a "(seq (count $GIT_BRANCH_ALLOWED_PREFIXES))"
 
+
