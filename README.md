@@ -30,6 +30,12 @@
 curl -sL https://raw.githubusercontent.com/ribeiroevandro/git-branch-helper/main/install.sh | bash
 ```
 
+Se você quiser rodar **sem interação**, pode definir a opção via variável de ambiente:
+
+```bash
+GIT_BRANCH_HELPER_INSTALL_CHOICE=1 curl -sL https://raw.githubusercontent.com/ribeiroevandro/git-branch-helper/main/install.sh | bash
+```
+
 ### Fish Shell (com Fisher)
 
 ```fish
