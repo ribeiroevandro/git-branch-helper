@@ -41,7 +41,12 @@ function create_branch -d "Criar branches Git com padrão personalizado"
         echo "  6) refactor - Refatoração"
         echo "  7) test    - Testes"
 
-        if not read -P "📝 Digite o número ou nome do tipo de branch: " branch_type
+        read -P "📝 Digite o número ou nome do tipo de branch: " branch_type
+        set -l __read_status $status
+        if test $__read_status -eq 130
+            echo "❌ Operação cancelada."
+            return 130
+        else if test $__read_status -ne 0
             echo "❌ Operação cancelada."
             return 130
         end
@@ -75,7 +80,12 @@ function create_branch -d "Criar branches Git com padrão personalizado"
 
     # 2. Obter o nome da branch (argumento ou prompt)
     if test -z "$branch_name"
-        if not read -P "📝 Digite o nome da branch (ex: migração de tela xpto): " branch_name
+        read -P "📝 Digite o nome da branch (ex: migração de tela xpto): " branch_name
+        set -l __read_status $status
+        if test $__read_status -eq 130
+            echo "❌ Operação cancelada."
+            return 130
+        else if test $__read_status -ne 0
             echo "❌ Operação cancelada."
             return 130
         end
@@ -104,13 +114,20 @@ function create_branch -d "Criar branches Git com padrão personalizado"
                     string replace -ra '^-+|-+$' '')
 
     # 4. Criar nome da branch no padrão especificado
-    set -l username $(whoami) # Você pode alterar este valor
+    # Preferir configs do plugin (conf.d), mas manter fallback
+    set -l username $GIT_BRANCH_USERNAME
+    if test -z "$username"
+        set username (whoami)
+    end
     set -l branch_suffix "$clean_type-$clean_name"
     set -l full_branch_name "$clean_type/$clean_name"
 
     # Incluir prefixo apenas em diretórios autorizados
     set -l current_dir (pwd)
-    set -l allowed_prefixes "$HOME/workspace/gitlab"
+    set -l allowed_prefixes $GIT_BRANCH_ALLOWED_PREFIXES
+    if test (count $allowed_prefixes) -eq 0
+        set allowed_prefixes "$HOME/workspace"
+    end
 
     for prefix in $allowed_prefixes
         set -l escaped_prefix (string escape --style=regex $prefix)
@@ -129,7 +146,12 @@ function create_branch -d "Criar branches Git com padrão personalizado"
 
     # Confirmar criação
     if test $auto_confirm -ne 1
-        if not read -P "✅ Criar esta branch? [Y/n]: " confirm
+        read -P "✅ Criar esta branch? [Y/n]: " confirm
+        set -l __read_status $status
+        if test $__read_status -eq 130
+            echo "❌ Operação cancelada."
+            return 130
+        else if test $__read_status -ne 0
             echo "❌ Operação cancelada."
             return 130
         end
@@ -147,7 +169,7 @@ function create_branch -d "Criar branches Git com padrão personalizado"
     end
 
     # Criar e fazer checkout para a nova branch
-    if git switch -c $full_branch_name
+    if git switch -c -- $full_branch_name
         echo ""
         echo "🎉 Branch '$full_branch_name' criada e ativada com sucesso!"
         echo "📂 Você está agora na nova branch."
