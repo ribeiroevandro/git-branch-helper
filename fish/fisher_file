@@ -1,0 +1,5 @@
+fish/functions/create_branch.fish
+fish/functions/git_branch_config.fish
+fish/completions/create_branch.fish
+fish/completions/git_branch_config.fish
+fish/conf.d/git-branch-helper.fish
