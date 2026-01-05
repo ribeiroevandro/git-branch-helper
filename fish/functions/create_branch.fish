@@ -1,4 +1,7 @@
 function create_branch -d "Criar branches Git com padrão personalizado"
+# Função para criar branches Git com padrão personalizado
+    # Uso: create_branch
+
     # Verificar se estamos em um repositório Git
     if not git rev-parse --git-dir >/dev/null 2>&1
         echo "❌ Erro: Este diretório não é um repositório Git!"
@@ -38,7 +41,10 @@ function create_branch -d "Criar branches Git com padrão personalizado"
         echo "  6) refactor - Refatoração"
         echo "  7) test    - Testes"
 
-        read -P "📝 Digite o número ou nome do tipo de branch: " branch_type
+        if not read -P "📝 Digite o número ou nome do tipo de branch: " branch_type
+            echo "❌ Operação cancelada."
+            return 130
+        end
     end
 
     # Mapear números para tipos
@@ -69,7 +75,10 @@ function create_branch -d "Criar branches Git com padrão personalizado"
 
     # 2. Obter o nome da branch (argumento ou prompt)
     if test -z "$branch_name"
-        read -P "📝 Digite o nome da branch (ex: migração de tela xpto): " branch_name
+        if not read -P "📝 Digite o nome da branch (ex: migração de tela xpto): " branch_name
+            echo "❌ Operação cancelada."
+            return 130
+        end
     end
 
     if test -z "$branch_name"
@@ -95,15 +104,15 @@ function create_branch -d "Criar branches Git com padrão personalizado"
                     string replace -ra '^-+|-+$' '')
 
     # 4. Criar nome da branch no padrão especificado
-    # Usar variável global de configuração
-    set -l username $GIT_BRANCH_USERNAME
+    set -l username $(whoami) # Você pode alterar este valor
     set -l branch_suffix "$clean_type-$clean_name"
     set -l full_branch_name "$clean_type/$clean_name"
 
     # Incluir prefixo apenas em diretórios autorizados
     set -l current_dir (pwd)
+    set -l allowed_prefixes "$HOME/workspace/gitlab"
 
-    for prefix in $GIT_BRANCH_ALLOWED_PREFIXES
+    for prefix in $allowed_prefixes
         set -l escaped_prefix (string escape --style=regex $prefix)
         set -l prefix_regex (string join '' '^' $escaped_prefix '(/|$)')
         if string match -rq $prefix_regex -- $current_dir
@@ -120,7 +129,10 @@ function create_branch -d "Criar branches Git com padrão personalizado"
 
     # Confirmar criação
     if test $auto_confirm -ne 1
-        read -P "✅ Criar esta branch? [Y/n]: " confirm
+        if not read -P "✅ Criar esta branch? [Y/n]: " confirm
+            echo "❌ Operação cancelada."
+            return 130
+        end
 
         if test "$confirm" = n -o "$confirm" = N
             echo "❌ Operação cancelada."
