@@ -36,6 +36,13 @@ Se você quiser rodar **sem interação**, pode definir a opção via variável 
 GIT_BRANCH_HELPER_INSTALL_CHOICE=1 curl -sL https://raw.githubusercontent.com/ribeiroevandro/git-branch-helper/main/install.sh | bash
 ```
 
+Se você estiver executando via `| bash` e quiser forçar o shell do plugin (ex.: Fish), use:
+
+```bash
+GIT_BRANCH_HELPER_SHELL=fish GIT_BRANCH_HELPER_INSTALL_CHOICE=1 \
+  curl -sL https://raw.githubusercontent.com/ribeiroevandro/git-branch-helper/main/install.sh | bash
+```
+
 ### Fish Shell (com Fisher)
 
 ```fish

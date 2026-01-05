@@ -42,11 +42,28 @@ echo ""
 
 # Detectar shell do usuário
 detect_shell() {
-    if [ -n "$FISH_VERSION" ]; then
+    # Override explícito (útil quando executando via pipe: curl ... | bash)
+    if [ -n "${GIT_BRANCH_HELPER_SHELL:-}" ]; then
+        echo "$GIT_BRANCH_HELPER_SHELL"
+        return 0
+    fi
+
+    # Preferir o shell do usuário (geralmente definido como login shell)
+    if [ -n "${SHELL:-}" ]; then
+        case "${SHELL##*/}" in
+            fish|zsh|bash)
+                echo "${SHELL##*/}"
+                return 0
+                ;;
+        esac
+    fi
+
+    # Fallback: detectar pelo shell que está executando este script
+    if [ -n "${FISH_VERSION:-}" ]; then
         echo "fish"
-    elif [ -n "$ZSH_VERSION" ]; then
+    elif [ -n "${ZSH_VERSION:-}" ]; then
         echo "zsh"
-    elif [ -n "$BASH_VERSION" ]; then
+    elif [ -n "${BASH_VERSION:-}" ]; then
         echo "bash"
     else
         echo "sh"
