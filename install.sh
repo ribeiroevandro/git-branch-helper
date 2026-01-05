@@ -17,6 +17,23 @@ print_success() { echo -e "${GREEN}$1${NC}"; }
 print_info() { echo -e "${BLUE}$1${NC}"; }
 print_warning() { echo -e "${YELLOW}$1${NC}"; }
 
+# Lê input do usuário de forma robusta, mesmo quando o script é executado via pipe
+# (ex.: curl ... | bash), onde o stdin não é um TTY.
+prompt_read() {
+    local prompt="$1"
+    local reply=""
+
+    if [ -t 0 ]; then
+        # stdin interativo
+        read -r -p "$prompt" reply || true
+    elif [ -r /dev/tty ]; then
+        # stdin veio de pipe; tenta ler do terminal
+        read -r -p "$prompt" reply </dev/tty || true
+    fi
+
+    printf '%s' "$reply"
+}
+
 REPO_URL="https://raw.githubusercontent.com/ribeiroevandro/git-branch-helper/main"
 
 echo ""
@@ -47,7 +64,16 @@ echo "  1) Plugin do shell (recomendado para Fish/Zsh/Bash)"
 echo "  2) Script standalone (funciona em qualquer shell)"
 echo "  3) Ambos"
 echo ""
-read -p "Digite sua escolha [1-3]: " choice
+
+# Permite modo não-interativo via env var
+choice="${GIT_BRANCH_HELPER_INSTALL_CHOICE:-}"
+if [ -z "$choice" ]; then
+    choice="$(prompt_read "Digite sua escolha [1-3]: ")"
+fi
+if [ -z "$choice" ]; then
+    choice="1"
+    print_warning "⚠️  Nenhuma entrada interativa detectada. Usando opção padrão: 1"
+fi
 
 case $choice in
     1)
